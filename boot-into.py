@@ -1,3 +1,5 @@
+from subprocess import Popen, PIPE
+
 grub = open("/boot/grub/grub.cfg").read().strip().split("\n")
 
 major = -1
@@ -5,7 +7,8 @@ minor = 0
 in_sub = False
 in_menu = False
 
-entries = [(0, -1, "Default")]
+#entries = [(0, -1, "Default")]
+entries = []
 
 for gl in grub:
     if gl.strip() == "}":
@@ -31,14 +34,31 @@ for gl in grub:
 
 for idx, e in enumerate(entries):
     print("[%2d] %s" % (idx, e[2]))
+print("[ x] Quit")
 
-choice = int(input("Choice: "))
-if choice >= 0 and choice < len(entries):
-    default = str(entries[choice][0])
-    if entries[choice][1] != -1:
-        default += ">" + str(entries[choice][1])
-    if choice != 0:
-        default = "\"%s\"" % default
-    print("sudo sed 's/GRUB_DEFAULT=.*/GRUB_DEFAULT=%s/' /etc/default/grub && sudo update-grub" % default)
-else:
-    print("Invalid choice")
+while True:
+    raw_choice = input("Choice: ")
+    if raw_choice.strip() in ["x", "X", "q", "Q"]:
+        break
+    try:
+        choice = int(raw_choice)
+    except:
+        print("Invalid choice!")
+        continue
+
+    if choice >= 0 and choice < len(entries):
+        default = str(entries[choice][0])
+        if entries[choice][1] != -1:
+            default += ">" + str(entries[choice][1])
+        cmd = ['grub-reboot', default]
+        process = Popen(cmd, stdout=PIPE, stderr=PIPE)
+        stdout, stderr = process.communicate()
+        print(stdout.decode("utf-8"))
+        print(stderr.decode("utf-8"))
+        process = Popen(['reboot', 'now'], stdout=PIPE,stderr=PIPE);
+        stdout, stderr = process.communicate()
+        print(stdout.decode("utf-8"))
+        print(stderr.decode("utf-8"))
+        break
+    else:
+        print("Invalid choice!")
