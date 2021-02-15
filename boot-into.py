@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from subprocess import Popen, PIPE
 
 grub = open("/boot/grub/grub.cfg").read().strip().split("\n")
