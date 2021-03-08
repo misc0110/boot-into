@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 
 from subprocess import Popen, PIPE
 
@@ -40,7 +40,7 @@ print("[ x] Quit")
 
 while True:
     raw_choice = input("Choice: ")
-    if raw_choice.strip() in ["x", "X", "q", "Q"]:
+    if str(raw_choice).strip() in ["x", "X", "q", "Q"]:
         break
     try:
         choice = int(raw_choice)

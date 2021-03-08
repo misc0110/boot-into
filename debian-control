@@ -1,0 +1,9 @@
+Package: boot-into
+Version: %VERSION%
+Section: devel
+Priority: optional
+Architecture: amd64
+Depends: python3
+Maintainer: Michael Schwarz <michael.schwarz91@gmail.com>
+Description: Boot into a specific GRUB entry
+ Shows a list of available GRUB entry and reboots into the selected entry only on the next boot
